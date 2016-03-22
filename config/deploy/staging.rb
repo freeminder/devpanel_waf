@@ -30,7 +30,7 @@ require "capistrano/bundler"
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the serns500549.ip-192-99-47.netver.
 
-server 'ec2-52-90-49-206.compute-1.amazonaws.com', user: 'deploy', roles: %w{app}
+server 'ec2-54-193-63-183.us-west-1.compute.amazonaws.com', user: 'deploy', roles: %w{app}
 
 # Custom SSH Options
 # ==================

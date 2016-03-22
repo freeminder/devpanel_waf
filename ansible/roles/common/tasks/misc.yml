@@ -1,0 +1,40 @@
+---
+# Useful miscellaneous
+
+- name: 'patch /etc/inputrc'
+  become: true
+  copy:
+    owner: root
+    group: root
+    mode: 0644
+    src: '{{ src_dir }}/ansible/files/inputrc'
+    dest: '/etc/inputrc'
+
+- name: 'creates directory for Midnight Commander dark theme'
+  become: yes
+  file: 
+    path: '/root/.local/share/mc/skins'
+    state: directory
+    owner: 'root'
+    group: 'root'
+    mode: 0775
+
+- name: 'copies config for Midnight Commander dark theme'
+  become: yes
+  copy:
+    owner: root
+    group: root
+    mode: 0644
+    src: '{{ src_dir }}/ansible/files/ajnasz-blue.ini'
+    dest: '/root/.local/share/mc/skins/ajnasz-blue.ini'
+
+- name: 'activates Midnight Commander dark theme'
+  become: yes
+  command: echo "alias mc='mc -S ajnasz-blue'" >> /etc/bash.bashrc
+
+- name: 'installs remote agent for Sublime Text'
+  become: yes
+  command: "wget -q -O /usr/local/bin/rsub https://raw.github.com/aurora/rmate/master/rmate && chmod +x /usr/local/bin/rsub"
+  args:
+    creates: /usr/local/bin/rsub
+

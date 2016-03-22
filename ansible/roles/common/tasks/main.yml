@@ -1,0 +1,131 @@
+---
+# Common roles for all hosts
+
+- name: updates apt cache and upgrades dist
+  apt: 
+    upgrade: 'yes'
+    update_cache: 'yes'
+
+- name: installs the necessary software
+  apt: 
+    name: '{{ item }}'
+    update_cache: 'yes'
+    cache_valid_time: 3600
+  with_items:
+    - '{{ common_packages }}'
+
+# Require for 'pip' ansible module
+- name: installs the python pip module 
+  easy_install:
+    name: pip
+
+
+- include: misc.yml
+
+
+# MySQL
+- name: installs mysql
+  apt: name={{ item }} update_cache=yes cache_valid_time=3600 state=present
+  become: yes
+  with_items:
+  - python-mysqldb
+  - mysql-server
+
+# rude, but works, instead using service module
+- name: starts mysql service
+  become: yes
+  command: service mysql restart
+  args:
+    creates: /var/run/mysqld/mysqld.sock
+
+- name: enables mysql service
+  become: yes
+  service: 
+    name: mysql
+    state: started
+    enabled: true
+
+- name: updates mysql root password for all root accounts
+  become: yes
+  mysql_user: 
+    name: root 
+    host: "{{ item }}" 
+    password: "{{ mysql_root_password }}"
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    check_implicit_admin: yes
+    priv: "*.*:ALL,GRANT"
+  with_items:
+    - 127.0.0.1
+    - ::1
+    - localhost 
+
+
+# install rvm
+- name: ensures that GPG key for RVM is installed
+  command: gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+  args:
+    creates: /root/.gnupg/secring.gpg
+
+- name: ensures that RVM is installed
+  shell: '\curl -sSL https://get.rvm.io | bash -s stable --ruby'
+  args:
+    creates: /usr/local/rvm
+
+- name: sets permissions to install gems by any user in rvm group
+  command: '{{ item }}'
+  become: true
+  register: perm_change 
+  changed_when: perm_change.stdout 
+  with_items:
+    - 'chown -R :rvm /usr/local/rvm/'
+    - 'chmod -R g+w /usr/local/rvm/'
+
+
+# nginx with phusion passenger
+- name: adds new gpg key for phusion passenger
+  apt_key:
+    keyserver: '{{ passenger_key_server }}'
+    id: '{{ passenger_key_id }}'
+    state: present
+
+- name: configures apt sources for phusion passenger installation
+  template: 
+    src: 'passenger.list.j2'
+    dest: '/etc/apt/sources.list.d/passenger.list'
+    owner: root
+    group: root
+
+- name: installs nginx with phusion passenger
+  apt:
+    name: '{{ item }}'
+    update_cache: yes
+    cache_valid_time: 0
+  with_items:
+    - nginx-extras
+    - passenger
+
+- name: adds nginx to start on boot
+  service:
+    name: nginx
+    state: started
+    enabled: yes
+
+- name: uploads nginx default site configuration
+  template:
+    src: 'nginx_default_site.j2'
+    dest: '/etc/nginx/sites-available/default'
+
+- name: uploads nginx configuration file
+  template:
+    src: 'nginx.conf.j2'
+    dest: '/etc/nginx/nginx.conf'
+  notify:
+    - restart nginx
+
+- include: capistrano.yml
+
+- name: restarts nginx
+  service:
+    name: nginx
+    state: restarted

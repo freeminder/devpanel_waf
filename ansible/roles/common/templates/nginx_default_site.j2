@@ -1,0 +1,15 @@
+  server {
+    listen       80;
+    server_name  _;
+
+    root /srv/www/{{ app_name }}/current/public;
+    client_max_body_size 128M;
+    passenger_enabled on;
+    passenger_ruby /usr/local/rvm/wrappers/default/ruby;
+    rails_env production;
+
+    location ~ ^/(assets|images|javascripts|stylesheets|system)/ {
+      expires max;
+      add_header Cache-Control public;
+    }
+  }

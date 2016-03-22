@@ -17,5 +17,6 @@
 /tmp
 
 # Custom
+/ansible/group_vars/all.yml
 /config/local_env.yml
 /public/images/

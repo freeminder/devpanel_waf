@@ -10,7 +10,7 @@ set :default_env, { path: "/usr/local/rvm/gems/ruby-2.2.1/bin:/usr/local/rvm/gem
 require 'capistrano/rvm'
 require "capistrano/bundler"
 
-server 'ec2-52-90-49-206.compute-1.amazonaws.com', user: 'deploy', roles: %w{app}
+server 'ec2-54-193-63-183.us-west-1.compute.amazonaws.com', user: 'deploy', roles: %w{app}
 
 
 namespace :assets do

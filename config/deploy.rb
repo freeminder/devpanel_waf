@@ -1,5 +1,5 @@
-set :application, 'DevpanelZabbix'
-set :repo_url, 'git@github.com:freeminder/devpanel_zabbix.git'
+set :application, 'DevpanelWaf'
+set :repo_url, 'git@github.com:freeminder/devpanel_waf.git'
 
 
 set :bundle_without, ["development", "test"]
@@ -12,7 +12,7 @@ set :passenger_restart_with_touch, true
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
 # Default deploy_to directory is /var/www/my_app
-set :deploy_to, '/srv/www/devpanel_zabbix'
+set :deploy_to, '/srv/www/devpanel_waf'
 
 # Default value for :scm is :git
 set :scm, :git

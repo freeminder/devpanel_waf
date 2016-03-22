@@ -1,0 +1,42 @@
+---
+# Capistrano deployment
+
+- name: creates deploy user
+  user: 
+    name: deploy
+    password: '$1$zXNyUjfV$JU.t4NkqTaZfrMFKuhImU0'
+    groups: 'www-data,rvm'
+    append: yes
+
+- name: install public key for deploy user
+  authorized_key:
+    user: deploy
+    key: "{{ lookup('file', '/home/dim/.ssh/id_rsa.pub') }}"
+
+- name: creates webapp directories for deployment
+  file: 
+    path: '{{ app_dir }}/{{ item }}'
+    state: directory
+    owner: 'deploy'
+    group: 'www-data'
+    mode: 0775
+  with_items:
+    - shared/bin
+    - shared/config
+    - shared/log
+    - shared/tmp
+    - releases
+
+- name: copies webapp private configs
+  become: true
+  copy:
+    owner: deploy
+    group: www-data
+    mode: 0640
+    src: '{{ src_dir }}/config/{{ item.src }}'
+    dest: '{{ app_dir }}/shared/config/{{ item.dest }}'
+  with_items:
+    - { src: 'database.yml', dest: 'database.yml' }
+    - { src: 'local_env.yml', dest: 'local_env.yml' }
+    - { src: 'secrets.yml', dest: 'secrets.yml' }
+

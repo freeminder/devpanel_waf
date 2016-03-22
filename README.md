@@ -18,9 +18,8 @@ This README would normally document whatever steps are necessary to get the appl
 config/local_env.yml should exist and contain:
 
     # AWS auth
-    ZBX_URL:       'url_of_zabbix_server'
-    ZBX_USER:      'zabbix_api_user'
-    ZBX_PASSWORD:  'zabbix_api_password'
+    AWS_ACCESS_KEY_ID:     'your_AWS_ACCESS_KEY_ID'
+    AWS_SECRET_ACCESS_KEY: 'your_AWS_SECRET_ACCESS_KEY'
     # secrets.yml
     SECRET_KEY_BASE: 'yoursecretkey'
 
