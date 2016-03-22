@@ -1,0 +1,19 @@
+.container
+  %p.lead= "Add ipset"
+  %hr
+  = form_tag("/ipsets", method: "post") do
+    .form-group
+      / = hidden_field_tag 'all'
+      = label_tag 'name', 'IPSet Name'
+      = text_field_tag 'ipset[name]',  'ip_set_test1', class: 'form-control'
+      = label_tag 'type', 'IPSet Type'
+      = select_tag 'ipset[type]', options_for_select(@ipsets.collect {|ip_set| [ ip_set[:name], ip_set[:id] ] }, '8dc930da'), class: 'form-control'
+      = label_tag 'ipset[cidr]', 'CIDR'
+      = text_field_tag 'ipset[cidr]',  '192.168.0.0/16', class: 'form-control'
+      %hr
+
+    .form-actions
+      %div{:align => "right"}
+        = link_to 'Go back', :back, class: 'btn btn-primary'
+        = submit_tag("Add ipset", class: 'btn btn-success')
+

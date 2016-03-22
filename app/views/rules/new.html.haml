@@ -1,0 +1,21 @@
+.container
+  %p.lead= "Add rule"
+  %hr
+  = form_tag("/rules", method: "post") do
+    .form-group
+      / = hidden_field_tag 'all'
+      = label_tag 'name', 'Rule Name'
+      = text_field_tag 'rule[name]',  'rule_test1', class: 'form-control'
+      = label_tag 'rule[ip_set_id]', 'IPSet'
+      = select_tag 'rule[ip_set_id]', options_for_select(@ipsets.collect {|ip_set| [ ip_set[:name], ip_set[:id] ] }, '8dc930da-66ab-4f5b-ba3b-28424e788010'), class: 'form-control'
+      %div{:align => "right"}
+        = label_tag 'useip', 'Use IP ?'
+        = check_box_tag  'rule[useip]', '1', true
+      %br/
+      %hr
+
+    .form-actions
+      %div{:align => "right"}
+        = link_to 'Go back', :back, class: 'btn btn-primary'
+        = submit_tag("Add rule", class: 'btn btn-success')
+

@@ -1,0 +1,22 @@
+.container
+  %table.table
+    %tr
+      %th Name
+      %th ID
+      %th IPSet Name
+      %th IPSet ID
+      %th IPSet CIDR
+    %tr
+      %td= @rule.rule.name
+      %td= @rule.rule.rule_id
+      %td= @ipset.ip_set.name
+      %td= @ipset.ip_set.ip_set_id
+      %td= @ipset.ip_set.ip_set_descriptors[0].value if @ipset.ip_set.ip_set_descriptors.any?
+
+    %hr
+
+  %div{:align => "right"}
+    = link_to 'Go back', :back, class: 'btn btn-primary'
+    -#= link_to 'Delete', @rule_path, method: :delete, data: {confirm: "Are you sure?"}, class: 'btn btn-danger' # if current_user.admin?
+    -#= link_to 'Edit', edit_rule_path, class: 'btn btn-warning'
+

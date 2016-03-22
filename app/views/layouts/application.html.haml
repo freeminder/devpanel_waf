@@ -1,0 +1,49 @@
+!!!
+%html
+  %head
+    %title AWS WAF API demo for devPanel
+    %link{:href => "http://fonts.googleapis.com/css?family=Cookie", :rel => "stylesheet", :type => "text/css"}
+    = stylesheet_link_tag 'application', media: :all
+    = javascript_include_tag 'application'
+  %body
+    .nav.navbar.navbar-default{role: 'navigation'}
+      .container-fluid
+        .navbar-header
+          %button.navbar-toggle{type: "button", data: {toggle: 'collapse', target: '#bs-example-navbar-collapse-1' } }
+            %span.sr-only Toggle navigation
+            %span.icon-ba
+            %span.icon-ba
+            %span.icon-ba
+          %a.navbar-brand{href: '/'} AWS WAF API demo for devPanel
+        .collapse.navbar-collapse#bs-example-navbar-collapse-1
+          %ul.nav.navbar-nav
+            - if current_user
+              -# if current_user.admin?
+                -#= menu_link 'Users', users_path
+                -#= menu_link 'Teams', teams_path
+              = menu_link 'Rules', rules_path
+              = menu_link 'IPSets', ipsets_path
+              = menu_link 'Log out', destroy_user_session_path, false, method: :delete
+              %li
+                -#= menu_link "Logged in as #{current_user.email}", user_path(current_user)
+            - else
+              %li.dropdown
+                = link_to 'Sign/Log in<b class="caret"></b>'.html_safe, '#', class: 'dropdown-toggle', 'data-toggle' => 'dropdown'
+                %ul.dropdown-menu
+                  = menu_link 'Log in', new_user_session_path
+                  -# = menu_link 'Sign up', new_user_registration_path, false
+                  
+    - flash.each do |name, msg|
+      %div{class: "alert alert-#{name == 'notice' ? "success" : "error"}"}
+        %a.close{'data-dismiss' => "alert"} &#215;
+        = content_tag :div, msg, :id => "flash_#{name}"
+    
+
+    = yield
+
+    -# .footer.navbar-fixed-bottom
+    %footer.footer
+      .container
+        %p.text-muted{:align=>"center"} AWS WAF API demo for devPanel
+        %p.text-muted{:align=>"center"}
+          For technical issues with this webapp please contact #{mail_to('dmitry.zhukov@gmail.com', 'Dmitry Zhukov')}.
