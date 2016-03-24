@@ -27,7 +27,7 @@ set :scm, :git
 # set :pty, true
 
 # Default value for :linked_files is []
-set :linked_files, %w{config/database.yml config/local_env.yml config/secrets.yml}
+set :linked_files, %w{config/database.yml config/local_env.yml config/secrets.yml db/development.sqlite3}
 
 # Default value for linked_dirs is []
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
