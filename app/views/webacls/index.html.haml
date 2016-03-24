@@ -1,0 +1,15 @@
+.container
+  %h2
+    %b WAF WebACLs
+  %table.table
+    %tr
+      %th Name
+      %th ID
+    - WAF.list_web_acls(limit: 100).web_acls.each do |webacl|
+      %tr
+        %td= link_to webacl.name, webacl_path(webacl.web_acl_id)
+        %td= webacl.web_acl_id
+
+  %hr
+  %div{:align => "right"}
+    = link_to 'Add webacl', new_webacl_path, class: 'btn btn-success'

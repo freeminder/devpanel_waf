@@ -20,6 +20,6 @@
 
   %div{:align => "right"}
     = link_to 'Go back', :back, class: 'btn btn-primary'
-    -#= link_to 'Delete', @ipset_path, method: :delete, data: {confirm: "Are you sure?"}, class: 'btn btn-danger' # if current_user.admin?
+    = link_to 'Delete', @ipset_path, method: :delete, data: {confirm: "Are you sure?"}, class: 'btn btn-danger' # if current_user.admin?
     -#= link_to 'Edit', edit_ipset_path, class: 'btn btn-warning'
 

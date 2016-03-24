@@ -1,0 +1,23 @@
+.container
+  %p.lead= "Add webacl"
+  %hr
+  = form_tag("/webacls", method: "post") do
+    .form-group
+      / = hidden_field_tag 'all'
+      = label_tag 'name', 'WebACL name'
+      = text_field_tag 'webacl[name]',  'webacl_test1', class: 'form-control'
+      = label_tag 'name', 'CloudWatch metric name'
+      = text_field_tag 'webacl[metric_name]',  'webacl_test1', class: 'form-control'
+      %small * can contain only alphanumeric characters (A-Z, a-z, 0-9); the name can't contain whitespace. You can't change the name of the metric after you create the WebACL.
+      %br
+      = label_tag 'default_action_type', 'Default action type'
+      = select_tag 'webacl[default_action_type]', options_for_select([ 'BLOCK', 'ALLOW', 'COUNT' ], 'IPMatch'), class: 'form-control'
+      = label_tag 'webacl[rule_id]', 'Rule name'
+      = select_tag 'webacl[rule_id]', options_for_select(@rules.collect {|rule| [ rule[:name], rule[:id] ] }, '8dc930da-66ab-4f5b-ba3b-28424e788010'), class: 'form-control'
+      %hr
+
+    .form-actions
+      %div{:align => "right"}
+        = link_to 'Go back', :back, class: 'btn btn-primary'
+        = submit_tag("Add webacl", class: 'btn btn-success')
+

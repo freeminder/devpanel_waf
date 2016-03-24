@@ -4,7 +4,7 @@
   = form_tag("/rules", method: "post") do
     .form-group
       / = hidden_field_tag 'all'
-      = label_tag 'name', 'Rule Name'
+      = label_tag 'name', 'Rule name'
       = text_field_tag 'rule[name]',  'rule_test1', class: 'form-control'
       = label_tag 'name', 'CloudWatch metric name'
       = text_field_tag 'rule[metric_name]',  'rule_test1', class: 'form-control'

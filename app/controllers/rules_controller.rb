@@ -1,12 +1,10 @@
 class RulesController < ApplicationController
 
-  before_filter :waf_init, only: [:index, :new, :show]
+  before_filter :ipsets_init, only: [:index, :new]
 
-  def waf_init
-    @waf = Aws::WAF::Client.new
-
+  def ipsets_init
     @ip_sets = Array.new
-    @waf.list_ip_sets({
+    WAF.list_ip_sets({
       limit: 100,
     }).ip_sets.each do |ip_set|
       @ip_sets << ip_set
@@ -15,30 +13,38 @@ class RulesController < ApplicationController
     # generate array with hashes
     @ipsets = Array.new
     @ip_sets.each do |ip_set|
-      @ipsets << Hash[name: ip_set.name, id: ip_set.ip_set_id, cidr: @waf.get_ip_set(ip_set_id: ip_set.ip_set_id).ip_set.ip_set_descriptors]
-      sleep 1 # avoid 'Rate exceeded'
+      @ipsets << Hash[name: ip_set.name, id: ip_set.ip_set_id, cidr: WAF.get_ip_set(ip_set_id: ip_set.ip_set_id).ip_set.ip_set_descriptors]
+      sleep 0.1 # avoid 'Rate exceeded'
     end
-
   end
 
-
   def index
+  end
+
+  def show
+    @rule   = WAF.get_rule(rule_id: params[:id])
+
+    @ipsets = Array.new
+    if @rule.rule.predicates.any?
+      @rule.rule.predicates.each do |e|
+        @ipsets << WAF.get_ip_set(ip_set_id: e.data_id)
+      end
+    end
   end
 
   def new
   end
 
   def create
-    @waf = Aws::WAF::Client.new
-    change_token = @waf.get_change_token().change_token
-    @rule = @waf.create_rule({
+    change_token = WAF.get_change_token().change_token
+    @rule = WAF.create_rule({
       name: params[:rule][:name],
       metric_name: params[:rule][:metric_name],
       change_token: change_token,
     })
 
-    change_token = @waf.get_change_token().change_token
-    @waf.update_rule({
+    change_token = WAF.get_change_token().change_token
+    WAF.update_rule({
       rule_id: @rule.rule.rule_id,
       change_token: change_token,
       updates: [
@@ -61,24 +67,34 @@ class RulesController < ApplicationController
     end
   end
 
-  def show
-    @rule   = @waf.get_rule(rule_id: params[:id])
-
-    @ipsets = Array.new
-    if @rule.rule.predicates.any?
-      @rule.rule.predicates.each do |e|
-        @ipsets << @waf.get_ip_set(ip_set_id: e.data_id)
-      end
-    end
-  end
-
   def destroy
-    @rule = @waf.get_rule(rule_id: params[:id])
-    change_token = @waf.get_change_token().change_token
+    @rule = WAF.get_rule(rule_id: params[:id])
 
     if @rule.rule.predicates.any?
       @rule.rule.predicates.each do |e|
-        @waf.update_rule({
+        # # remove descriptor from IPSet
+        # @ipset = WAF.get_ip_set(ip_set_id: e.data_id)
+        # if @ipset.ip_set.ip_set_descriptors.any?
+        #   @ipset.ip_set.ip_set_descriptors.each do |descriptor|
+        #     change_token = WAF.get_change_token().change_token
+        #     WAF.update_ip_set({
+        #       ip_set_id: e.data_id,
+        #       change_token: change_token,
+        #       updates: [
+        #         {
+        #           action: "DELETE", # required, accepts INSERT, DELETE
+        #           ip_set_descriptor: {
+        #             type: descriptor.type, # required, accepts IPV4
+        #             value: descriptor.value, # required
+        #           },
+        #         },
+        #       ],
+        #     })
+        #   end
+        # end
+        # remove IPSet from Rule
+        change_token = WAF.get_change_token().change_token
+        WAF.update_rule({
           rule_id: params[:id],
           change_token: change_token,
           updates: [
@@ -86,8 +102,8 @@ class RulesController < ApplicationController
               action: "DELETE",
               predicate: {
                 negated: true,
-                type: "IPMatch",
-                data_id: @waf.get_ip_set(ip_set_id: e.data_id),
+                type: e.type,
+                data_id: e.data_id,
               },
             },
           ],
@@ -95,7 +111,9 @@ class RulesController < ApplicationController
       end
     end
 
-    @waf.delete_rule({
+    # remove Rule
+    change_token = WAF.get_change_token().change_token
+    WAF.delete_rule({
       rule_id: params[:id],
       change_token: change_token,
     })

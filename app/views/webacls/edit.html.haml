@@ -1,0 +1,30 @@
+.container
+  %p.lead= "Edit ipset"
+  %hr
+  = form_tag("/ipsets/#{params[:id]}", method: "patch") do
+    .form-group
+      / = hidden_field_tag 'all'
+      = label_tag 'name', 'IPSet Name'
+      = text_field_tag 'ipset[name]',  @ipset[:name], class: 'form-control'
+      = label_tag 'ipset[templateid]', 'Template'
+      = select_tag 'ipset[templateid]', options_for_select(@templates.collect {|hg| [ hg['name'], hg['templateid'] ] }, @ipset[:template_id]), class: 'form-control', :disabled => true
+      = label_tag 'ipset[groupid]', 'IPSetgroup'
+      = select_tag 'ipset[groupid]', options_for_select(@ipsetgroups.collect {|hg| [ hg['name'], hg['groupid'] ] }, @ipset[:ipsetgroup_id]), class: 'form-control'
+      = label_tag 'ip', 'IP Address'
+      = text_field_tag 'ipset[ip]',    @ipset[:ip], class: 'form-control'
+      = label_tag 'dns', 'DNS Name'
+      = text_field_tag 'ipset[dns]',   @ipset[:dns], class: 'form-control'
+      = label_tag 'port', 'Port'
+      = text_field_tag 'ipset[port]',  @ipset[:port], class: 'form-control'
+      %div{:align => "right"}
+        = label_tag 'useip', 'Use IP ?'
+        = check_box_tag  'ipset[useip]', '1', true if @ipset[:useip] == '1'
+        = check_box_tag  'ipset[useip]', '0', false if @ipset[:useip] == '0'
+      %br/
+      %hr
+
+    .form-actions
+      %div{:align => "right"}
+        = link_to 'Go back', :back, class: 'btn btn-primary'
+        = submit_tag("Update", class: 'btn btn-success')
+

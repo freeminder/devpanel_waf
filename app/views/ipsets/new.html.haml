@@ -4,9 +4,9 @@
   = form_tag("/ipsets", method: "post") do
     .form-group
       / = hidden_field_tag 'all'
-      = label_tag 'name', 'IPSet Name'
+      = label_tag 'name', 'IPSet name'
       = text_field_tag 'ipset[name]',  'ip_set_test1', class: 'form-control'
-      = label_tag 'type', 'IPSet Type'
+      = label_tag 'type', 'IPSet type'
       = select_tag 'ipset[type]', options_for_select([ "IPV4" ], "IPV4"), class: 'form-control'
       = label_tag 'ipset[cidr]', 'CIDR'
       = text_field_tag 'ipset[cidr]',  '192.168.0.0/16', class: 'form-control'

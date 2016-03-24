@@ -1,0 +1,34 @@
+.container
+  %table.table
+    %tr
+      %th Name
+      %th ID
+      %th Metric name
+      %th Default action type
+      %th Rule priority
+      %th Rule ID
+      %th Rule action type
+    %tr
+      %td= @webacl.web_acl.name
+      %td= @webacl.web_acl.web_acl_id
+      %td= @webacl.web_acl.metric_name
+      %td= @webacl.web_acl.default_action.type
+      %td
+        - @webacl.web_acl.rules.each do |rule|
+          = rule.priority
+          %br/
+      %td
+        - @webacl.web_acl.rules.each do |rule|
+          = rule.rule_id
+          %br/
+      %td
+        - @webacl.web_acl.rules.each do |rule|
+          = rule.action.type
+          %br/
+    %hr
+
+  %div{:align => "right"}
+    = link_to 'Go back', :back, class: 'btn btn-primary'
+    = link_to 'Delete', @webacl_path, method: :delete, data: {confirm: "Are you sure?"}, class: 'btn btn-danger' # if current_user.admin?
+    -#= link_to 'Edit', edit_web_acl_path, class: 'btn btn-warning'
+

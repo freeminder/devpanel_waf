@@ -5,7 +5,7 @@
     %tr
       %th Name
       %th ID
-    - @waf.list_rules(limit: 100).rules.each do |rule|
+    - WAF.list_rules(limit: 100).rules.each do |rule|
       %tr
         %td= link_to rule.name, rule_path(rule.rule_id)
         %td= rule.rule_id
