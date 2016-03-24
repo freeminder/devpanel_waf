@@ -18,6 +18,7 @@ This README would normally document whatever steps are necessary to get the appl
 config/local_env.yml should exist and contain:
 
     # AWS auth
+    AWS_REGION             'your_AWS_REGION'
     AWS_ACCESS_KEY_ID:     'your_AWS_ACCESS_KEY_ID'
     AWS_SECRET_ACCESS_KEY: 'your_AWS_SECRET_ACCESS_KEY'
     # secrets.yml

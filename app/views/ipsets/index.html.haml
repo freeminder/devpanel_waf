@@ -5,12 +5,20 @@
     %tr
       %th Name
       %th ID
+      %th Type
       %th CIDR
     - @ipsets.each do |ip_set|
       %tr
         %td= link_to ip_set[:name], ipset_path(ip_set[:id])
         %td= ip_set[:id]
-        %td= ip_set[:cidr].first.value if ip_set[:cidr].any?
+        %td
+          - ip_set[:cidr].each do |e|
+            = e.type if ip_set[:cidr].any?
+            %br/
+        %td
+          - ip_set[:cidr].each do |e|
+            = e.value if ip_set[:cidr].any?
+            %br/
 
   %hr
   %div{:align => "right"}

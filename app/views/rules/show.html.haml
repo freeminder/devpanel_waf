@@ -9,10 +9,20 @@
     %tr
       %td= @rule.rule.name
       %td= @rule.rule.rule_id
-      %td= @ipset.ip_set.name
-      %td= @ipset.ip_set.ip_set_id
-      %td= @ipset.ip_set.ip_set_descriptors[0].value if @ipset.ip_set.ip_set_descriptors.any?
-
+      %td
+        - @ipsets.each do |e|
+          = e.ip_set.name
+          %br/
+      %td
+        - @ipsets.each do |e|
+          = e.ip_set.ip_set_id
+          %br/
+      %td
+        - @ipsets.each do |e|
+          - if e.ip_set.ip_set_descriptors.any?
+            - e.ip_set.ip_set_descriptors.each do |e|
+              = e.value
+              %br/
     %hr
 
   %div{:align => "right"}

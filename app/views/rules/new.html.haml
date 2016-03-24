@@ -6,12 +6,14 @@
       / = hidden_field_tag 'all'
       = label_tag 'name', 'Rule Name'
       = text_field_tag 'rule[name]',  'rule_test1', class: 'form-control'
+      = label_tag 'name', 'CloudWatch metric name'
+      = text_field_tag 'rule[metric_name]',  'rule_test1', class: 'form-control'
+      %small * can contain only alphanumeric characters (A-Z, a-z, 0-9); the name can't contain whitespace. You can't change the name of the metric after you create the Rule.
+      %br
+      -#= label_tag 'type', 'Type'
+      -#= select_tag 'ipset[type]', options_for_select([ 'IPMatch', 'ByteMatch', 'SqlInjectionMatch', 'SizeConstraint' ], 'IPMatch'), class: 'form-control'
       = label_tag 'rule[ip_set_id]', 'IPSet'
       = select_tag 'rule[ip_set_id]', options_for_select(@ipsets.collect {|ip_set| [ ip_set[:name], ip_set[:id] ] }, '8dc930da-66ab-4f5b-ba3b-28424e788010'), class: 'form-control'
-      %div{:align => "right"}
-        = label_tag 'useip', 'Use IP ?'
-        = check_box_tag  'rule[useip]', '1', true
-      %br/
       %hr
 
     .form-actions
