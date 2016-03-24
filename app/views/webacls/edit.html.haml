@@ -1,25 +1,25 @@
 .container
-  %p.lead= "Edit ipset"
+  %p.lead= "Edit webacl"
   %hr
-  = form_tag("/ipsets/#{params[:id]}", method: "patch") do
+  = form_tag("/webacls/#{params[:id]}", method: "patch") do
     .form-group
       / = hidden_field_tag 'all'
       = label_tag 'name', 'IPSet Name'
-      = text_field_tag 'ipset[name]',  @ipset[:name], class: 'form-control'
-      = label_tag 'ipset[templateid]', 'Template'
-      = select_tag 'ipset[templateid]', options_for_select(@templates.collect {|hg| [ hg['name'], hg['templateid'] ] }, @ipset[:template_id]), class: 'form-control', :disabled => true
-      = label_tag 'ipset[groupid]', 'IPSetgroup'
-      = select_tag 'ipset[groupid]', options_for_select(@ipsetgroups.collect {|hg| [ hg['name'], hg['groupid'] ] }, @ipset[:ipsetgroup_id]), class: 'form-control'
+      = text_field_tag 'webacl[name]',  @webacl[:name], class: 'form-control'
+      = label_tag 'webacl[templateid]', 'Template'
+      = select_tag 'webacl[templateid]', options_for_select(@templates.collect {|hg| [ hg['name'], hg['templateid'] ] }, @webacl[:template_id]), class: 'form-control', :disabled => true
+      = label_tag 'webacl[groupid]', 'IPSetgroup'
+      = select_tag 'webacl[groupid]', options_for_select(@webaclgroups.collect {|hg| [ hg['name'], hg['groupid'] ] }, @webacl[:webaclgroup_id]), class: 'form-control'
       = label_tag 'ip', 'IP Address'
-      = text_field_tag 'ipset[ip]',    @ipset[:ip], class: 'form-control'
+      = text_field_tag 'webacl[ip]',    @webacl[:ip], class: 'form-control'
       = label_tag 'dns', 'DNS Name'
-      = text_field_tag 'ipset[dns]',   @ipset[:dns], class: 'form-control'
+      = text_field_tag 'webacl[dns]',   @webacl[:dns], class: 'form-control'
       = label_tag 'port', 'Port'
-      = text_field_tag 'ipset[port]',  @ipset[:port], class: 'form-control'
+      = text_field_tag 'webacl[port]',  @webacl[:port], class: 'form-control'
       %div{:align => "right"}
         = label_tag 'useip', 'Use IP ?'
-        = check_box_tag  'ipset[useip]', '1', true if @ipset[:useip] == '1'
-        = check_box_tag  'ipset[useip]', '0', false if @ipset[:useip] == '0'
+        = check_box_tag  'webacl[useip]', '1', true if @webacl[:useip] == '1'
+        = check_box_tag  'webacl[useip]', '0', false if @webacl[:useip] == '0'
       %br/
       %hr
 

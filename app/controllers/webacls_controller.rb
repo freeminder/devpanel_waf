@@ -27,7 +27,7 @@ class WebaclsController < ApplicationController
       name: params[:webacl][:name],
       metric_name: params[:webacl][:metric_name],
       default_action: {
-        type: "BLOCK", # required, accepts BLOCK, ALLOW, COUNT
+        type: params[:webacl][:default_action_type], # required, accepts BLOCK, ALLOW, COUNT
       },
       change_token: change_token,
     })
