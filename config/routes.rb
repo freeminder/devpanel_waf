@@ -4,4 +4,6 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {registrations: 'registrations'}
   resources :webacls, :rules, :ipsets
 
+  get 'health' => 'health#index'
+
 end
